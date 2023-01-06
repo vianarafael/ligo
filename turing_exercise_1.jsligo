@@ -1,0 +1,43 @@
+type storage = map<string, int>;
+
+type par_tupple = [string, int];
+
+type parameter =
+| ["Invokation", par_tupple];
+
+
+type return_ = [list <operation>, storage];
+
+const invokation = ([store, values]: [storage, par_tupple]) : storage => {
+    let size : nat = Map.size(store);
+    // if it is the first time just add the number
+    if (size < (1 as nat)) {
+         return Map.update(values[0], Some(values[1]), store);
+    } else {
+    // else multiply the number w/ the last number
+
+        let check_biggest = ([last_biggest_num, binding] : [int, par_tupple]): int => {
+            if (last_biggest_num < binding[1]) {
+                return binding[1]
+            }
+            return last_biggest_num
+        };
+
+        let new_val : int = Map.fold(check_biggest, store, 0);
+        return  Map.add(values[0], values[1] * new_val, store)
+    }
+    
+}
+
+
+/* Main access point that dispatches to the entrypoints according to
+   the smart contract parameter. */
+const main = ([action, store] : [parameter, storage]) : return_ => {
+ return [
+   (list([]) as list <operation>),    // No operations
+   (match (action, {
+     Invokation: (par: par_tupple) => invokation([store, par])
+    }))
+  ]
+};
+
