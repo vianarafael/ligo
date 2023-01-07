@@ -12,7 +12,11 @@ const invokation = ([store, values]: [storage, par_tupple]) : storage => {
     let size : nat = Map.size(store);
     // if it is the first time just add the number
     if (size < (1 as nat)) {
-         return Map.update(values[0], Some(values[1]), store);
+        if (values[1] < 1) {
+            return Map.update(values[0], Some(1), store);
+        } else {
+            return Map.update(values[0], Some(values[1]), store);
+        }
     } else {
     // else multiply the number w/ the last number
 
@@ -24,7 +28,11 @@ const invokation = ([store, values]: [storage, par_tupple]) : storage => {
         };
 
         let new_val : int = Map.fold(check_biggest, store, 0);
-        return  Map.add(values[0], values[1] * new_val, store)
+        if (values[1] < 1) {
+            return  Map.add(values[0], 1 * new_val, store)
+        } else {
+            return  Map.add(values[0], values[1] * new_val, store)
+        }
     }
     
 }
