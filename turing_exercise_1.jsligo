@@ -8,33 +8,41 @@ type parameter =
 
 type return_ = [list <operation>, storage];
 
-const invokation = ([store, values]: [storage, par_tupple]) : storage => {
-    let size : nat = Map.size(store);
-    // if it is the first time just add the number
-    if (size < (1 as nat)) {
-        if (values[1] < 1) {
-            return Map.update(values[0], Some(1), store);
+const invokation = ([store, values]: [storage, par_tupple]) : storage  => {
+    // check if the string exists in the store
+    let string_already_in_store: bool = Map.mem(values[0], store);
+
+    if (!string_already_in_store) {
+
+        // up
+        let size : nat = Map.size(store);
+        // if it is the first time just add the number
+        if (size < (1 as nat)) {
+            if (values[1] < 1) {
+                return Map.update(values[0], Some(1), store);
+            } else {
+                return Map.update(values[0], Some(values[1]), store);
+            }
         } else {
-            return Map.update(values[0], Some(values[1]), store);
+        // else multiply the number w/ the last number
+
+            let check_biggest = ([last_biggest_num, binding] : [int, par_tupple]): int => {
+                if (last_biggest_num < binding[1]) {
+                    return binding[1]
+                }
+                return last_biggest_num
+            };
+
+            let new_val : int = Map.fold(check_biggest, store, 0);
+            if (values[1] < 1) {
+                return  Map.add(values[0], 1 * new_val, store)
+            } else {
+                return  Map.add(values[0], values[1] * new_val, store)
+            }
         }
     } else {
-    // else multiply the number w/ the last number
-
-        let check_biggest = ([last_biggest_num, binding] : [int, par_tupple]): int => {
-            if (last_biggest_num < binding[1]) {
-                return binding[1]
-            }
-            return last_biggest_num
-        };
-
-        let new_val : int = Map.fold(check_biggest, store, 0);
-        if (values[1] < 1) {
-            return  Map.add(values[0], 1 * new_val, store)
-        } else {
-            return  Map.add(values[0], values[1] * new_val, store)
-        }
+        return store;
     }
-    
 }
 
 
@@ -49,3 +57,4 @@ const main = ([action, store] : [parameter, storage]) : return_ => {
   ]
 };
 
+# https://better-call.dev/ghostnet/KT19aXsFh86v3qrjvZxTaTBpDCdssAZSCkrD/storage
