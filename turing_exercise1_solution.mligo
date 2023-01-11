@@ -8,6 +8,7 @@
 //         if string exists in map -> update the value of that string 
 // int should the int * the int give by the last user
 
+
 type storage = (string, int) map
 
 type input = {
