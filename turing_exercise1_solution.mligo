@@ -10,6 +10,11 @@
 
 type storage = (string, int) map
 
+type input = {
+    key: string;
+    value: int
+}
+
 type parameter =
     Map_Operation of storage
     // | Send_tez
@@ -18,12 +23,14 @@ type return = operation list * storage
 
 // entrypoints
 
-let mapOperation  (store, map_input : storage * storage) : storage = 
-    let key : string = map_input.key
+let mapOperation  (store, key, val : storage * input) : storage = 
+    let key : string = record_input.key
+    let val  = record_intput.value
+
     // if int = 0 -> int = 1
-    let value = if map_input.value = 0 then 1
-    else map_input.value
-    in map_input
+    let value = if val = 0 then 1
+    else record_input.value
+    in record_input
 
     // if map is empty store string and int
     let is_empty : boolean = Map.size(store) < 1n
@@ -46,6 +53,6 @@ let mapOperation  (store, map_input : storage * storage) : storage =
 let main (action, store : parameter * storage) =
  ([] : operation list),    // No operations
  (match action with
-    Map_Operation (mapInput) -> mapOperation (store, mapInput)
+    Map_Operation (recordInput) -> mapOperation (store, recordInput)
  )
 
